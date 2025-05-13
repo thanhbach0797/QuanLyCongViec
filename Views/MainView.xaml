@@ -1,0 +1,22 @@
+﻿<Window x:Class="TaskManagementApp.Views.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Trang chính" Height="600" Width="800"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Tiêu đề -->
+        <TextBlock Grid.Row="0" Text="Chào mừng đến với Ứng dụng Quản lý Công việc" 
+                   FontSize="24" FontWeight="Bold" HorizontalAlignment="Center" 
+                   Margin="0,0,0,20" Foreground="#2E2E2E"/>
+
+        <!-- Nội dung chính -->
+        <TextBlock Grid.Row="1" Text="Đây là trang chính. Bạn có thể bắt đầu quản lý công việc tại đây." 
+                   FontSize="16" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+    </Grid>
+</Window>

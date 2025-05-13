@@ -1,0 +1,206 @@
+﻿<Window x:Class="TaskManagementApp.Views.AdminView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Task Management - Admin" Height="600" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#F5F5F5">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Menu bên trái -->
+        <StackPanel Grid.Column="0" Background="#2E2E2E">
+            <TextBlock Text="Admin Menu" FontSize="18" FontWeight="Bold" 
+                       Foreground="White" Margin="10" HorizontalAlignment="Center"/>
+            <Button Content="Quản lý User" FontSize="14" Margin="10,5" Background="#0078D4" 
+                    Foreground="White" Height="40" Command="{Binding NavigateToManageUsersCommand}"/>
+            <Button Content="Quản lý Dự án" FontSize="14" Margin="10,5" Background="#0078D4" 
+                    Foreground="White" Height="40" Command="{Binding NavigateToManageProjectsCommand}"/>
+            <Button Content="Quản lý Công việc" FontSize="14" Margin="10,5" Background="#0078D4" 
+                    Foreground="White" Height="40" Command="{Binding NavigateToManageTasksCommand}"/>
+            <Button Content="Logout" FontSize="14" Margin="10,5" Background="#FF4444" 
+                    Foreground="White" Height="40" Command="{Binding LogoutCommand}"/>
+        </StackPanel>
+
+        <!-- Nội dung chính -->
+        <ContentControl Grid.Column="1" Margin="20" Content="{Binding}">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Setter Property="ContentTemplate">
+                        <Setter.Value>
+                            <!-- Mặc định hiển thị Quản lý User -->
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="*"/>
+                                    </Grid.RowDefinitions>
+
+                                    <!-- Tiêu đề -->
+                                    <TextBlock Grid.Row="0" Text="Quản lý User" FontSize="24" FontWeight="Bold" 
+                                               Foreground="#2E2E2E" Margin="0,0,0,10"/>
+
+                                    <!-- Bộ lọc -->
+                                    <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                                        <TextBlock Text="Lọc theo Vai trò:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                        <ComboBox ItemsSource="{Binding RoleFilters}" SelectedItem="{Binding SelectedRoleFilter}" 
+                                                  Width="150" FontSize="14" Margin="0,0,10,0"/>
+                                        <Button Content="Lọc" Command="{Binding FilterUsersCommand}" 
+                                                Width="80" Height="30" Background="#0078D4" Foreground="White"/>
+                                    </StackPanel>
+
+                                    <!-- Danh sách User -->
+                                    <DataGrid Grid.Row="2" ItemsSource="{Binding FilteredUsers}" AutoGenerateColumns="False" 
+                                              CanUserAddRows="False" IsReadOnly="True" SelectionMode="Single">
+                                        <DataGrid.Columns>
+                                            <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
+                                            <DataGridTextColumn Header="Tên" Binding="{Binding Username}" Width="150"/>
+                                            <DataGridTextColumn Header="Vai trò" Binding="{Binding Role}" Width="100"/>
+                                            <DataGridTextColumn Header="Email" Binding="{Binding Email}" Width="*"/>
+                                            <DataGridTemplateColumn Header="Hành động" Width="150">
+                                                <DataGridTemplateColumn.CellTemplate>
+                                                    <DataTemplate>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <Button Content="Sửa" Margin="2" Background="#FFA500" Foreground="White"
+                                                                    Command="{Binding Path=DataContext.EditUserCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                                    CommandParameter="{Binding}"/>
+                                                            <Button Content="Xóa" Margin="2" Background="#DC3545" Foreground="White"
+                                                                    Command="{Binding Path=DataContext.DeleteUserCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                                    CommandParameter="{Binding}"/>
+                                                        </StackPanel>
+                                                    </DataTemplate>
+                                                </DataGridTemplateColumn.CellTemplate>
+                                            </DataGridTemplateColumn>
+                                        </DataGrid.Columns>
+                                    </DataGrid>
+                                </Grid>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding CurrentView}" Value="ManageProjects">
+                            <Setter Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Tiêu đề -->
+                                            <TextBlock Grid.Row="0" Text="Quản lý Dự án" FontSize="24" FontWeight="Bold" 
+                                                       Foreground="#2E2E2E" Margin="0,0,0,10"/>
+
+                                            <!-- Bộ lọc -->
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                                                <TextBlock Text="Lọc theo Ngày Bắt đầu:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <TextBox Text="{Binding ProjectStartDateFilter, UpdateSourceTrigger=PropertyChanged}" 
+                                                         Width="150" FontSize="14" Margin="0,0,10,0"/>
+                                                <Button Content="Lọc" Command="{Binding FilterProjectsCommand}" 
+                                                        Width="80" Height="30" Background="#0078D4" Foreground="White"/>
+                                            </StackPanel>
+
+                                            <!-- Danh sách Dự án -->
+                                            <DataGrid Grid.Row="2" ItemsSource="{Binding FilteredProjects}" AutoGenerateColumns="False" 
+                                                      CanUserAddRows="False" IsReadOnly="True" SelectionMode="Single">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="ID" Binding="{Binding Id}" Width="80"/>
+                                                    <DataGridTextColumn Header="Tên Dự án" Binding="{Binding Name}" Width="150"/>
+                                                    <DataGridTextColumn Header="Mô tả" Binding="{Binding Description}" Width="*"/>
+                                                    <DataGridTextColumn Header="Ngày Bắt đầu" Binding="{Binding StartDate}" Width="120"/>
+                                                    <DataGridTextColumn Header="Ngày Kết thúc" Binding="{Binding EndDate}" Width="120"/>
+                                                    <DataGridTemplateColumn Header="Hành động" Width="150">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Button Content="Sửa" Margin="2" Background="#FFA500" Foreground="White"
+                                                                            Command="{Binding Path=DataContext.EditProjectCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                                            CommandParameter="{Binding}"/>
+                                                                    <Button Content="Xóa" Margin="2" Background="#DC3545" Foreground="White"
+                                                                            Command="{Binding Path=DataContext.DeleteProjectCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                                            CommandParameter="{Binding}"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding CurrentView}" Value="ManageTasks">
+                            <Setter Property="ContentTemplate">
+                                <Setter.Value>
+                                    <DataTemplate>
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="Auto"/>
+                                                <RowDefinition Height="*"/>
+                                            </Grid.RowDefinitions>
+
+                                            <!-- Tiêu đề -->
+                                            <TextBlock Grid.Row="0" Text="Quản lý Công việc" FontSize="24" FontWeight="Bold" 
+                                                       Foreground="#2E2E2E" Margin="0,0,0,10"/>
+
+                                            <!-- Bộ lọc -->
+                                            <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,10">
+                                                <TextBlock Text="Lọc theo Dự án:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <ComboBox ItemsSource="{Binding Projects}" SelectedItem="{Binding SelectedProjectFilter}" 
+                                                          DisplayMemberPath="Name" Width="150" FontSize="14" Margin="0,0,10,0"/>
+                                                <TextBlock Text="Lọc theo Trạng thái:" FontSize="14" VerticalAlignment="Center" Margin="0,0,10,0"/>
+                                                <ComboBox ItemsSource="{Binding StatusFilters}" SelectedItem="{Binding SelectedStatusFilter}" 
+                                                          Width="150" FontSize="14" Margin="0,0,10,0"/>
+                                                <Button Content="Lọc" Command="{Binding FilterTasksCommand}" 
+                                                        Width="80" Height="30" Background="#0078D4" Foreground="White"/>
+                                                <Button Content="Thêm Công việc" Command="{Binding AddTaskCommand}" 
+                                                        Width="120" Height="30" Background="#28A745" Foreground="White" Margin="10,0,0,0"/>
+                                            </StackPanel>
+
+                                            <!-- Danh sách Công việc -->
+                                            <DataGrid Grid.Row="2" ItemsSource="{Binding FilteredTasks}" AutoGenerateColumns="False" 
+                                                      CanUserAddRows="False" IsReadOnly="True" SelectionMode="Single">
+                                                <DataGrid.Columns>
+                                                    <DataGridTextColumn Header="Task ID" Binding="{Binding TaskId}" Width="80"/>
+                                                    <DataGridTextColumn Header="Tên Công việc" Binding="{Binding Title}" Width="150"/>
+                                                    <DataGridTextColumn Header="Dự án" Binding="{Binding ProjectId}" Width="100"/>
+                                                    <DataGridTextColumn Header="Người được giao" Binding="{Binding AssignedTo}" Width="120"/>
+                                                    <DataGridTextColumn Header="Trạng thái" Binding="{Binding Status}" Width="100"/>
+                                                    <DataGridTextColumn Header="Ngày Hết hạn" Binding="{Binding DueDate}" Width="120"/>
+                                                    <DataGridTemplateColumn Header="Hành động" Width="150">
+                                                        <DataGridTemplateColumn.CellTemplate>
+                                                            <DataTemplate>
+                                                                <StackPanel Orientation="Horizontal">
+                                                                    <Button Content="Xem" Margin="2" Background="#0078D4" Foreground="White"
+                                                                            Command="{Binding Path=DataContext.ViewTaskCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                                            CommandParameter="{Binding}"/>
+                                                                    <Button Content="Sửa" Margin="2" Background="#FFA500" Foreground="White"
+                                                                            Command="{Binding Path=DataContext.EditTaskCommand, RelativeSource={RelativeSource AncestorType={x:Type DataGrid}}}"
+                                                                            CommandParameter="{Binding}"/>
+                                                                </StackPanel>
+                                                            </DataTemplate>
+                                                        </DataGridTemplateColumn.CellTemplate>
+                                                    </DataGridTemplateColumn>
+                                                </DataGrid.Columns>
+                                            </DataGrid>
+                                        </Grid>
+                                    </DataTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
+    </Grid>
+</Window>

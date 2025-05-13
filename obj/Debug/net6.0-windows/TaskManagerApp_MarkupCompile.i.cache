@@ -1,0 +1,20 @@
+﻿TaskManagerApp
+1.0.0.0
+
+winexe
+C#
+.cs
+C:\Users\Dell G15 5511\Downloads\TaskManagerApp\TaskManagerApp\obj\Debug\net6.0-windows\
+TaskManagerApp
+none
+false
+TRACE;DEBUG;NET;NET6_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+C:\Users\Dell G15 5511\Downloads\TaskManagerApp\TaskManagerApp\App.xaml
+9216926816
+
+221192702559
+2161037143496
+Dictionaries\Colours.xaml;Dictionaries\Icons.xaml;Dictionaries\Styles.xaml;Views\AddTaskWindow.xaml;Views\AdminView.xaml;Views\EmployeeView.xaml;Views\LoginView.xaml;Views\MainView.xaml;Views\ManagerView.xaml;
+
+True
+
